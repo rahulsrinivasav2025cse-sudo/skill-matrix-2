@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillMatrix - Staffing Recommender</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>SkillMatrix</h1>
+  <p>Employee skill matrix and project staffing recommender</p>
+</header>
+<nav id="tabs">
+  <button class="active" data-tab="employees">Employees</button>
+  <button data-tab="skills">Skills</button>
+  <button data-tab="projects">Projects</button>
+  <button data-tab="allocations">Allocations</button>
+  <button data-tab="recommend">Recommendations</button>
+  <button data-tab="coverage">Coverage</button>
+</nav>
+<main>
+
+<section id="employees" class="active">
+  <div class="card">
+    <h2 id="empFormTitle">Add employee</h2>
+    <form id="empForm">
+      <input type="hidden" id="empId">
+      <label>Name<input id="empName" required maxlength="120"></label>
+      <label>Email<input id="empEmail" type="email" required maxlength="160"></label>
+      <label>Available capacity (%)<input id="empCap" type="number" min="1" max="100" value="100" required></label>
+      <button class="btn" type="submit" id="empSave">Add employee</button>
+      <button class="btn ghost" type="button" id="empCancel" hidden>Cancel edit</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Set an employee's skill level</h2>
+    <p class="hint">Adds the skill to the employee, or changes the level if it already exists.</p>
+    <div class="row">
+      <label>Employee<select id="esEmp"></select></label>
+      <label>Skill<select id="esSkill"></select></label>
+      <label>Proficiency<select id="esProf"></select></label>
+      <button class="btn" id="esSave">Save skill level</button>
+    </div>
+  </div>
+  <div class="card"><h2>Employees</h2><div class="table-wrap" id="empTable"></div></div>
+</section>
+
+<section id="skills">
+  <div class="card">
+    <h2 id="skillFormTitle">Add skill</h2>
+    <form id="skillForm">
+      <input type="hidden" id="skillId">
+      <label>Name<input id="skillName" required maxlength="100"></label>
+      <label>Description<input id="skillDesc" maxlength="255"></label>
+      <button class="btn" type="submit" id="skillSave">Add skill</button>
+      <button class="btn ghost" type="button" id="skillCancel" hidden>Cancel edit</button>
+    </form>
+  </div>
+  <div class="card"><h2>Skills</h2><div class="table-wrap" id="skillTable"></div></div>
+</section>
+
+<section id="projects">
+  <div class="card">
+    <h2 id="projFormTitle">Add project</h2>
+    <form id="projForm">
+      <input type="hidden" id="projId">
+      <label>Name<input id="projName" required maxlength="150"></label>
+      <label>Description<input id="projDesc" maxlength="500"></label>
+      <button class="btn" type="submit" id="projSave">Add project</button>
+      <button class="btn ghost" type="button" id="projCancel" hidden>Cancel edit</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Set a project's required skill</h2>
+    <p class="hint">Proficiency is the minimum level an employee needs for this skill.</p>
+    <div class="row">
+      <label>Project<select id="psProj"></select></label>
+      <label>Skill<select id="psSkill"></select></label>
+      <label>Minimum proficiency<select id="psProf"></select></label>
+      <button class="btn" id="psSave">Save requirement</button>
+    </div>
+  </div>
+  <div class="card"><h2>Projects</h2><div class="table-wrap" id="projTable"></div></div>
+</section>
+
+<section id="allocations">
+  <div class="card">
+    <h2>Assign an employee to a project</h2>
+    <p class="hint">An employee cannot be allocated beyond their available capacity across all projects. 100% is fully allocated; anything less is partial.</p>
+    <div class="row">
+      <label>Employee<select id="alEmp"></select></label>
+      <label>Project<select id="alProj"></select></label>
+      <label>Allocation (%)<input id="alPct" type="number" min="1" max="100" value="50"></label>
+      <button class="btn" id="alSave">Assign</button>
+    </div>
+  </div>
+  <div class="card"><h2>Allocations</h2><div class="table-wrap" id="alTable"></div></div>
+</section>
+
+<section id="recommend">
+  <div class="card">
+    <h2>Recommend employees for a project</h2>
+    <p class="hint">Ranked by matched skills, then higher proficiency, then free capacity. Employees with no free capacity are left out.</p>
+    <div class="row">
+      <label>Project<select id="recProj"></select></label>
+      <button class="btn" id="recGo">Find best fit</button>
+    </div>
+  </div>
+  <div class="card"><h2>Ranked employees</h2><div class="table-wrap" id="recTable"><div class="empty">Choose a project to see recommendations.</div></div></div>
+</section>
+
+<section id="coverage">
+  <div class="card">
+    <h2>Team skill coverage and gaps</h2>
+    <p class="hint">Check a project's requirements, or pick skills yourself.</p>
+    <div class="row">
+      <label>Project (uses its requirements)<select id="covProj"></select></label>
+      <button class="btn" id="covProjGo">Check project</button>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <label style="margin-bottom:8px">Or choose skills</label>
+    <div class="checks" id="covSkills"></div>
+    <div class="row" style="margin-top:12px">
+      <label>Minimum proficiency<select id="covProf"></select></label>
+      <button class="btn" id="covSkillsGo">Check skills</button>
+    </div>
+  </div>
+  <div class="card"><h2>Result</h2><div id="covResult"><div class="empty">Run a check to see coverage.</div></div></div>
+</section>
+
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="script.js"></script>
+</body>
+</html>
